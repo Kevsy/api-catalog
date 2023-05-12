@@ -19,22 +19,21 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "api-catalog: A well-known URI to help discovery of APIs"
+abbrev: "api-catalog"
+category: standards
 
-docname: draft-todo-yourname-protocol-latest
-submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
+docname: draft-smith-api-catalog
+submissiontype: IETF
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: httpapis
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - API
+ - well-known
 venue:
   group: WG
   type: Working Group
@@ -45,30 +44,35 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Kevin Smith
+    organization: Vodafone
+    email: kevin.smith@vodafone.com
 
 normative:
-
+ RFC9264:
+ RFC8615:
+ RFC6415:
+ RFC8288:
 informative:
-
+ RFC2119:
 
 --- abstract
 
-TODO Abstract
+This document defines the "api-catalog" well-known URI. It is intended to facilitate discovery of the APIs published by a Web host.
 
 
 --- middle
 
 # Introduction
 
-TODO Introduction
+A Web host may publish Application Programming Interfaces (APIs) to encourage requests for interaction from  external parties. Such APIs must be discovered before they may be used - i.e., the external party needs to know what APIs a given Web host exposes, including their purpose, any constraints to use, and the endpoints to interact with the APIs. To faciliate discovery of this information, this document proposes a well-known URI, 'api-catalog', as a location where a Web host's API endpoints are listed and described.
 
 
-# Conventions and Definitions
+# Goals and non-goals
 
-{::boilerplate bcp14-tagged}
+The primary goal is to facilitate the discovery of both a Web Host's public API endpoints, and metadata that informs the potential API client of the purpose of each API and any constraints around usage.
+			
+Non-goals: this document does not mandate paths for API endpoints. i.e., it is not mandating that my_example_api should be available at `example.com/.well-known/api-catalog/my_example_api` (although it is not forbidden to do so).
 
 
 # Security Considerations
