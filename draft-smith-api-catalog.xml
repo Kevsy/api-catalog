@@ -1,93 +1,200 @@
----
-###
-# Internet-Draft Markdown Template
-#
-# Rename this file from draft-todo-yourname-protocol.md to get started.
-# Draft name format is "draft-<yourname>-<workgroup>-<name>.md".
-#
-# For initial setup, you only need to edit the first block of fields.
-# Only "title" needs to be changed; delete "abbrev" if your title is short.
-# Any other content can be edited, but be careful not to introduce errors.
-# Some fields will be set automatically during setup if they are unchanged.
-#
-# Don't include "-00" or "-latest" in the filename.
-# Labels in the form draft-<yourname>-<workgroup>-<name>-latest are used by
-# the tools to refer to the current version; see "docname" for example.
-#
-# This template uses kramdown-rfc: https://github.com/cabo/kramdown-rfc
-# You can replace the entire file if you prefer a different format.
-# Change the file extension to match the format (.xml for XML, etc...)
-#
-###
-title: "api-catalog: A well-known URI to help discovery of APIs"
-abbrev: "api-catalog"
-category: standards
-
-docname: draft-smith-api-catalog
-submissiontype: IETF
-number:
-date:
-consensus: true
-v: 3
-area: AREA
-workgroup: httpapis
-keyword:
- - API
- - well-known
-venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
-
-author:
- -
-    fullname: Kevin Smith
-    organization: Vodafone
-    email: kevin.smith@vodafone.com
-
-normative:
- RFC9264:
- RFC8615:
- RFC6415:
- RFC8288:
-informative:
- RFC2119:
-
---- abstract
-
-This document defines the "api-catalog" well-known URI. It is intended to facilitate discovery of the APIs published by a Web host.
-
-
---- middle
-
-# Introduction
-
-A Web host may publish Application Programming Interfaces (APIs) to encourage requests for interaction from  external parties. Such APIs must be discovered before they may be used - i.e., the external party needs to know what APIs a given Web host exposes, including their purpose, any constraints to use, and the endpoints to interact with the APIs. To faciliate discovery of this information, this document proposes a well-known URI, 'api-catalog', as a location where a Web host's API endpoints are listed and described.
-
-
-# Goals and non-goals
-
-The primary goal is to facilitate the discovery of both a Web Host's public API endpoints, and metadata that informs the potential API client of the purpose of each API and any constraints around usage.
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="rfc7991bis.rnc"?>
+<!-- <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?> -->
+<!DOCTYPE rfc [
+<!ENTITY nbsp   "&#160;">
+<!ENTITY zwsp   "&#8203;">
+<!ENTITY nbhy   "&#8209;">
+<!ENTITY wj     "&#8288;">
+]>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="std" docName="draft-smith-api-catalog-01" ipr="trust200902"  obsoletes="" updates="" submissionType="IETF" xml:lang="en" version="3">
+	<front>
+		<title abbrev="api-catalog">api-catalog: A well-known URI to help discovery of APIs</title>
+		<seriesInfo name="Internet-Draft" value="draft-smith-api-catalog-01"/>
+		<author fullname="Kevin Smith" initials="K" role="editor" surname="Smith">
+			<organization>Vodafone</organization>
+			<address>
+				<postal>
+					<street>One Kingdom Street</street>
+					<city>London</city>
+					<code>W2 6BY</code>
+					<country>GB</country>
+				</postal>
+				<email>kevin.smith@vodafone.com</email>
+				<uri>www.vodafone.com</uri>
+			</address>
+		</author>
+		<date year="2023" month="" day=""/>
+		<!-- https://authors.ietf.org/en/rfcxml-vocabulary#date -->
+		<area>General</area>
+		<workgroup>Internet Engineering Task Force</workgroup>
+		<keyword>well-known</keyword>
+		<keyword>API</keyword>
+		<abstract>
+			<t>This document defines the "api-catalog" well-known URI. It is intended to facilitate discovery of the APIs published by a Web host.</t>
+		</abstract>
+	</front>
+	<middle>
+		<section>
+			<!-- The default attributes for <section> are numbered="true" and toc="default" -->
+			<name>Introduction</name>
+			<t>A Web host may publish Application Programming Interfaces (APIs) to encourage requests for interaction from  external parties. Such APIs must be discovered before they may be used - i.e., the external party needs to know what APIs a given Web host exposes, including their purpose, any constraints to use, and the endpoints to interact with the APIs. To faciliate discovery of this information, this document proposes a well-known URI, 'api-catalog', as a location where a Web host's API endpoints are listed and described.</t>
+			<section anchor="goals">
+				<name>Goals and non-goals</name>
+				<t>The primary goal is to facilitate the discovery of both a Web Host's public API endpoints, and metadata that informs the potential API client of the purpose of each API and any constraints around usage.</t>
+				<t>Non-goals: this document does not mandate paths for API endpoints. i.e., it does not mandate that my_example_api should be available at example.com/.well-known/api-catalog/my_example_api (although it is not forbidden to do so).</t>
+			</section>
+			<section anchor="requirements">
+				<name>Requirements Language</name>
+				<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 
+					<xref target="RFC2119"/> when, and only when, they appear in all capitals, as shown here.
+				</t>
+			</section>
+		</section>
+		<section>
+			<name>Using the 'api-catalog' well-known URI</name>
+			<t>The api-catalog well-known URI is intended for HTTP(S) servers that publish APIs and wish to facilitate their discovery. Since the purpose of the api-catalog well-known URI is to facilitate API discovery with minimal prior knowledge, it is recommended that /.well-known/api-catalog be hosted at a predictable hostname, i.e. www.example.com . It may also be hosted at other hostnames, e.g. api.example.com, developer.example.com etc.</t>
+			<t>A Web host (example.com) supporting this URI:</t>
+			<ul>
+				<li>SHALL resolve an HTTP(S) GET request to /.well-known/api-catalog and return a list of public APIs.</li>
+				<li>SHOULD resolve an HTTP(S) HEAD request to /.well-known/api-catalog with a response including a Link header with the relation(s) defined in 
+					<xref target="LINK-RELATION" />.
+				
+				</li>
+			</ul>
+		</section>
+		<section anchor="MEDIA-TYPE">
+			<name>Associated Media type: the api-catalog linkset </name>
+			<t>A request to the api-catalog well-known URI is expected to return a set of one or more links, each labelled with a link relation to allow machines and humans to decide if, and understand why, to follow them. The api-catalog is recommended to consist of:</t>
+			<ul>
+				<li>link(s) to the API gateway(s), or portal(s), of the Web Host, that present a public Web page with details of APIs offered, documentation, Ts &amp; Cs etc.</li>
+				<li>links to each API offered by the Web Host. Ideally each of these links will be to an API bookmark, which, if followed, will provide further links with information on API endpoints, operations, versions, documentation  etc. </li>
+			</ul>
+			<t>
+				<xref target="RFC9264"/>  defines the application/linkset+json JSON document format for link sets, and is used for the following example:
+			</t>
+			<figure>
+				<name>api-catalog linkset example</name>
+<sourcecode name="api-catalog-linkset" type="JSON">
+	<![CDATA[
+{ "linkset":
+  [
+	{ "anchor": "https://example.com/",
+	  "api-portal": [
+		{"href": "https://developer.example.com/my_portal"}
+	  ]
+	},
+	{ "anchor": "https://example.com/,
+	  "https://example.com/relations/api1" : [
+		{"href": "https://developer.example.com/apis/api1"}
+	  ]
+	},
+	{ "anchor": "https://example.com/,
+	  "https://example.com/relations/api2" : [
+		{"href": "https://developer.example.com/apis/api2"}
+	  ]
+	},	
+	{ "anchor": "https://example.com/,
+	  "https://some_standards_org.example.com/relations/some_api" : [
+		{"href": "https://developer.example.com/apis/api3"}
+	  ]
+	},						
+  ]
+}	
+]]>
+</sourcecode>
+			</figure>
+		</section>
+		<section anchor="LINK-RELATION">
+			<name>Link relations</name>
+			<t>(Editor's note: TODO. Suggested are: "api-catalog", and also "api-portal" because it seems likely many  implementers will have such a portal, hence it makes sense to make that common. The APIs themselves are less likely to be common across implementers and should use extensible link relations, providing a URI to their definition. This also applies if the API being linked to is based on a standard, in which case the standard body in question should declare the URI for the extensible link relation definition, e.g. https://some_standards_org.example.com/relations/some_api , and this can be used by all implementing hosts of that API)</t>
+		</section>
+		<section>
+			<name>Conformance to RFC8615</name>
+			<t>The requirements in section 3 of 
+				
+				<xref target="RFC8615" /> for defining Well-Known Uniform Resource Identifiers are met as follows:
 			
-Non-goals: this document does not mandate paths for API endpoints. i.e., it is not mandating that my_example_api should be available at `example.com/.well-known/api-catalog/my_example_api` (although it is not forbidden to do so).
-
-
-# Security Considerations
-
-TODO Security
-
-
-# IANA Considerations
-
-This document has no IANA actions.
-
-
---- back
-
-# Acknowledgments
-{:numbered="false"}
-
-TODO acknowledge.
+			</t>
+			<section>
+				<name>Path prefix</name>
+				<t>The api-catalog URI SHALL be appended to the /.well-known/ path-prefix for "well-known locations".
+				</t>
+			</section>
+			<section>
+				<name>Supported URI schemes</name>
+				<t>The api-catalog well-known URI may be used with the HTTP and HTTPS URI schemes.</t>
+			</section>
+			<section>
+				<name>Registration of the api-catalog well-known URI</name>
+				<t>See 
+					<xref target="IANA"/> considerations below.
+				</t>
+			</section>
+		</section>
+		<section anchor="IANA">
+			<name>IANA Considerations</name>
+			<section>
+				<name>The api-catalog well-known URI</name>
+				<t> This specification registers the "api-catalog" well-known URI in the Well-Known URI Registry as defined by 
+					<xref target="RFC6415"/> .
+				</t>
+				<t>URI suffix: api-catalog</t>
+				<t>Specification document(s):  draft-smith-api-catalog-01</t>
+				<t>Related information:  The "api-catalog" documents obtained from the same host using the HTTP and HTTPS protocols (using default ports) MUST be identical.</t>
+			</section>
+			<section>
+				<name>The api-catalog link relation</name>
+				<t> This specification registers the "api-catalog" link relation by following the procedures per section 4.2.2 of 
+					<xref target="RFC8288"/>  (Editor's note: this is TODO).
+				</t>
+			</section>
+			<section>
+				<name>The api-portal link relation</name>
+				<t>(Editor's note: if the suggestion above to include this is agreed).</t>
+			</section>
+		</section>
+		<section anchor="Security">
+			<!-- All drafts are required to have a security considerations section. See RFC 3552 for a guide. -->
+			<name>Security Considerations</name>
+			<t>TBD</t>
+		</section>
+	</middle>
+	<back>
+		<references>
+			<name>References</name>
+			<references>
+				<name>Normative References</name>
+				<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6415.xml"/>
+				<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8288.xml"/>				
+				<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8615.xml"/>				
+				<xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9264.xml"/>
+			</references>
+			<references>
+				<name>Informative References</name>
+				<reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+					<!-- Manually added reference -->
+					<front>
+						<title>Key words for use in RFCs to Indicate Requirement Levels</title>
+						<author initials="S." surname="Bradner" fullname="S. Bradner">
+							<organization/>
+						</author>
+						<date year="1997" month="March"/>
+						<abstract>
+							<t>In many standards track documents several words are used to signify the requirements in the specification. These words are often capitalized. This document defines these words as they should be interpreted in IETF documents. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.
+              </t>
+						</abstract>
+					</front>
+					<seriesInfo name="BCP" value="14"/>
+					<seriesInfo name="RFC" value="2119"/>
+					<seriesInfo name="DOI" value="10.17487/RFC2119"/>
+				</reference>
+			</references>
+		</references>
+		<section anchor="Acknowledgements" numbered="false">
+			<!-- an Acknowledgements section is optional -->
+			<name>Acknowledgements</name>
+			<t>TODO</t>
+		</section>
+	</back>
+</rfc>
