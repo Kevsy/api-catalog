@@ -77,45 +77,52 @@
 				<name>api-catalog linkset example</name>
 <sourcecode name="api-catalog-linkset" type="JSON">
 	<![CDATA[
-{ "linkset":
-  [
-	{ "anchor": "https://example.com/",
-	  "api-portal": [
-		{"href": "https://developer.example.com/my_portal"}
-	  ]
-	},
-	{ "anchor": "https://example.com/,
-	  "https://example.com/relations/api1" : [
-		{"href": "https://developer.example.com/apis/api1"}
-	  ]
-	},
-	{ "anchor": "https://example.com/,
-	  "https://example.com/relations/api2" : [
-		{"href": "https://developer.example.com/apis/api2"}
-	  ]
-	},	
-	{ "anchor": "https://example.com/,
-	  "https://some_standards_org.example.com/relations/some_api" : [
-		{"href": "https://developer.example.com/apis/api3"}
-	  ]
-	},						
-  ]
-}	
+{
+	"linkset": [{
+			"anchor": "https://example.com/",
+			"api-portal": [{
+				"href": "https://developer.example.com/api_portal"
+			}],
+			"api-dashboard": [{
+				"href": "https://developer.example.com/api_portal/dashboard"
+			}],
+			"api-list": [{
+				"href": "https://developer.example.com/apis/foo_api"
+			}, {
+				"href": "https://developer.example.com/apis/bar_api"
+			}]
+		},
+		{
+			"anchor": "https://example.com/relations/apis/foo_api",
+			"api-description": [{
+				"href": "https://developer.example.com/my_portal/apis/foo_api/description.html"
+			}],
+			"api-documentation": [{
+				"href": "https://developer.example.com/my_portal/apis/foo_api/documentation.html"
+			}]
+		},
+		{
+			"anchor": "https://example.com/relations/apis/bar_api",
+			"api-description": [{
+				"href": "https://developer.example.com/my_portal/apis/bar_api/description.html"
+			}],
+			"api-documentation": [{
+				"href": "https://developer.example.com/my_portal/apis/bar_api/documentation.html"
+			}]
+		}		
+	]
+}
 ]]>
 </sourcecode>
 			</figure>
 		</section>
 		<section anchor="LINK-RELATION">
 			<name>Link relations</name>
-			<t>(Editor's note: TODO. Suggested are: "api-catalog", and also "api-portal" because it seems likely many  implementers will have such a portal, hence it makes sense to make that common. The APIs themselves are less likely to be common across implementers and should use extensible link relations, providing a URI to their definition. This also applies if the API being linked to is based on a standard, in which case the standard body in question should declare the URI for the extensible link relation definition, e.g. https://some_standards_org.example.com/relations/some_api , and this can be used by all implementing hosts of that API)</t>
+			<t>(Editor's note: TODO. Suggested are: "api-catalog" (to refer to the catalog itself), "api-portal" (a human-readable API portal), "api-dashboard" (for registration. API key management etc) because it seems likely many  implementers will have such a portal, hence it makes sense to make that common. The APIs themselves are less likely to be common across implementers and should use extensible link relations, providing a URI to their definition. This also applies if the API being linked to is based on a standard, in which case the standard body in question should declare the URI for the extensible link relation definition, e.g. https://some_standards_org.example.com/relations/some_api , and this can be used by all implementing hosts of that API). What is common to all APIs is are new link relations for api-description and api-documentation.</t>
 		</section>
 		<section>
 			<name>Conformance to RFC8615</name>
-			<t>The requirements in section 3 of 
-				
-				<xref target="RFC8615" /> for defining Well-Known Uniform Resource Identifiers are met as follows:
-			
-			</t>
+			<t>The requirements in section 3 of <xref target="RFC8615" /> for defining Well-Known Uniform Resource Identifiers are met as follows:</t>
 			<section>
 				<name>Path prefix</name>
 				<t>The api-catalog URI SHALL be appended to the /.well-known/ path-prefix for "well-known locations".
