@@ -56,7 +56,7 @@
 			<t>The api-catalog well-known URI is intended for HTTP(S) servers that publish APIs and wish to facilitate their discovery. Since the purpose of the api-catalog well-known URI is to facilitate API discovery with minimal prior knowledge, it is recommended that /.well-known/api-catalog be hosted at a predictable hostname, i.e. www.example.com . It may also be hosted at other hostnames, e.g. api.example.com, developer.example.com etc.</t>
 			<t>A Web host (example.com) supporting this URI:</t>
 			<ul>
-				<li>SHALL resolve an HTTP(S) GET request to /.well-known/api-catalog and return a list of public APIs.</li>
+				<li>SHALL resolve an HTTP(S) GET request to /.well-known/api-catalog and return a linkset </li>
 				<li>SHOULD resolve an HTTP(S) HEAD request to /.well-known/api-catalog with a response including a Link header with the relation(s) defined in 
 					<xref target="LINK-RELATION" />.
 				
@@ -65,60 +65,42 @@
 		</section>
 		<section anchor="MEDIA-TYPE">
 			<name>Associated Media type: the api-catalog linkset </name>
-			<t>A request to the api-catalog well-known URI is expected to return a set of one or more links, each labelled with a link relation to allow machines and humans to decide if, and understand why, to follow them. The api-catalog is recommended to consist of:</t>
-			<ul>
-				<li>link(s) to the API gateway(s), or portal(s), of the Web Host, that present a public Web page with details of APIs offered, documentation, Ts &amp; Cs etc.</li>
-				<li>links to each API offered by the Web Host. Ideally each of these links will be to an API bookmark, which, if followed, will provide further links with information on API endpoints, operations, versions, documentation  etc. </li>
-			</ul>
-			<t>
-				<xref target="RFC9264"/>  defines the application/linkset+json JSON document format for link sets, and is used for the following example:
-			</t>
+			<t>A request to the api-catalog well-known URI SHALL return a linkset <xref target="RFC9264"/> containing an array of links with the link relation "api-bookmarks" and an anchor representing the entity hosting the APIs.   Following each link SHOULD return a machine-readable description of the API with sufficient information to decide if, and understand how, to use the API. (Editor's note: we can recommend the format for this machine-readble description, e.g. https://restdesc.org/)</t>
+			<t>Example request:</t>
 			<figure>
 				<name>api-catalog linkset example</name>
 <sourcecode name="api-catalog-linkset" type="JSON">
 	<![CDATA[
-{
-	"linkset": [{
-			"anchor": "https://example.com/",
-			"api-portal": [{
-				"href": "https://developer.example.com/api_portal"
-			}],
-			"api-dashboard": [{
-				"href": "https://developer.example.com/api_portal/dashboard"
-			}],
-			"api-list": [{
-				"href": "https://developer.example.com/apis/foo_api"
-			}, {
-				"href": "https://developer.example.com/apis/bar_api"
-			}]
-		},
-		{
-			"anchor": "https://example.com/relations/apis/foo_api",
-			"api-description": [{
-				"href": "https://developer.example.com/my_portal/apis/foo_api/description.html"
-			}],
-			"api-documentation": [{
-				"href": "https://developer.example.com/my_portal/apis/foo_api/documentation.html"
-			}]
-		},
-		{
-			"anchor": "https://example.com/relations/apis/bar_api",
-			"api-description": [{
-				"href": "https://developer.example.com/my_portal/apis/bar_api/description.html"
-			}],
-			"api-documentation": [{
-				"href": "https://developer.example.com/my_portal/apis/bar_api/documentation.html"
-			}]
-		}		
-	]
-}
+			GET .well-know/api-catalog HTTP/1.1
+			Host: example.com
+			Accept: application/linkset+json
+			
+			HTTP/1.1 200 OK
+			Date: Mon, 01 Jun 2023 00:00:01 GMT
+			Server: Apache-Coyote/1.1
+			Content-Type: application/linkset+json
+			
+			{
+				"linkset": [{
+					"anchor": https://example.com/,
+					"api-bookmarks": [{
+						"href": https://developer.example.com/apis/foo_api
+					}, {
+						"href": https://developer.example.com/apis/bar_api
+					}, {
+						"href": https://developer.example.com/apis/cantona_api
+					}
+					]
+				}]
+			}
 ]]>
 </sourcecode>
 			</figure>
 		</section>
 		<section anchor="LINK-RELATION">
 			<name>Link relations</name>
-			<t>(Editor's note: TODO. Suggested are: "api-catalog" (to refer to the catalog itself), "api-portal" (a human-readable API portal), "api-dashboard" (for registration. API key management etc) because it seems likely many  implementers will have such a portal, hence it makes sense to make that common. The APIs themselves are less likely to be common across implementers and should use extensible link relations, providing a URI to their definition. This also applies if the API being linked to is based on a standard, in which case the standard body in question should declare the URI for the extensible link relation definition, e.g. https://some_standards_org.example.com/relations/some_api , and this can be used by all implementing hosts of that API). What is common to all APIs is are new link relations for api-description and api-documentation.</t>
+			<t>"api-catalog" . A list of one or more machine-readable API bookmarks published by the Web host. </t>		
+			<t>"api-bookmarks" . A collection of API bookmarks. Each bookmatk may be followed to obtain a machine-readable description of each API. (Editor's note: not sure if it's better to have an array of links under "api-bookmarks", or an array of links each with their own anchor,  and individual link relation of "api-bookmark")</t>
 		</section>
 		<section>
 			<name>Conformance to RFC8615</name>
@@ -157,8 +139,10 @@
 				</t>
 			</section>
 			<section>
-				<name>The api-portal link relation</name>
-				<t>(Editor's note: if the suggestion above to include this is agreed).</t>
+				<name>The api-bookmarks link relation</name>
+				<t> This specification registers the "api-bookmarks" link relation by following the procedures per section 4.2.2 of 
+					<xref target="RFC8288"/>  (Editor's note: this is TODO).
+				</t>
 			</section>
 		</section>
 		<section anchor="Security">
